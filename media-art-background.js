@@ -36,3 +36,4 @@ const app = root.shadowRoot.querySelector("ha-app-layout");
 const originalStyle = app.style;
 
 setInterval(function() { setBackground(root, lovelace, app, originalStyle) }, 5000);
+setBackground(root, lovelace, app, originalStyle);
