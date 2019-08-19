@@ -10,6 +10,8 @@ resources:
   - url: /community_plugin/lovelace-media-art-background/media-art-background.js
     type: module
 media_art_background:
+  blur: 10px
+  transition_opacity: 1s
   entities:
     - media_player.main
     - entity: media_player.secondary
