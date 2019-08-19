@@ -1,11 +1,40 @@
-function setBackground(root, lovelace, bground_elem, originalStyle) {
-  let hass = root.hass;
+function setupStyle(lovelace, bgroundElem) {
+
+  // load config entries
+  let transitionOpacity = lovelace.config.media_art_background.transition_opacity || "0s"; // default -> instant
+  let filterBlur = lovelace.config.media_art_background.blur || '0px'; // default -> no blur
+
+  // apply style to background element
+  bgroundElem.style.position = "absolute"; // fill entire window
+  bgroundElem.style.top = 0;
+  bgroundElem.style.left = 0;
+  bgroundElem.style.width = "100%";
+  bgroundElem.style.height = "100%";
+
+  bgroundElem.style.opacity = 0;
+  bgroundElem.style.transition = "opacity " + transitionOpacity;
+
+  bgroundElem.style.backgroundRepeat = 'no-repeat';
+  bgroundElem.style.backgroundPosition = 'center';
+  bgroundElem.style.backgroundSize = 'cover';
+  bgroundElem.style.backgroundAttachment = 'fixed';
+  bgroundElem.style.filter = `blur(${filterBlur})`;
+
+  bgroundElem.style.zIndex = -1; // below view elements
+}
+
+function setBackground(root, lovelace, bgroundElem) {
+  const hass = root.hass;
+
+  // loop through entities from config
   for (let entity of lovelace.config.media_art_background.entities) {
+
+    // get config attributes or default values
     let entityName = entity.entity || entity;
     let entityValidStates = entity.valid_states || ['playing'];
     let entityImageAttribute = entity.image_attribute || 'entity_picture';
-    let filterBlur = lovelace.config.media_art_background.blur || '0px';
 
+    // get entity state
     let entityInfo = hass.states[entity];
 
     if (!entityInfo) {
@@ -18,37 +47,27 @@ function setBackground(root, lovelace, bground_elem, originalStyle) {
     const backgroundUrl = entityInfo.attributes[entityImageAttribute];
     if (!backgroundUrl) continue;
 
-    bground_elem.style.backgroundImage = `url('${backgroundUrl}')`
-    bground_elem.style.backgroundRepeat = 'no-repeat';
-    bground_elem.style.backgroundPosition = 'center';
-    bground_elem.style.backgroundSize = 'cover';
-    bground_elem.style.backgroundAttachment = 'fixed';
-    bground_elem.style.filter = `blur(${filterBlur})`;
+    bgroundElem.style.backgroundImage = `url('${backgroundUrl}')`
+    bgroundElem.style.opacity = 1;
 
-    return;
+    return; // abort after first element with valid background
   }
 
-  bground_elem.style = originalStyle;
+  setupStyle(lovelace, bgroundElem);
 };
 
+// get HA root element
 let root = document.querySelector("home-assistant");
 root = root.shadowRoot.querySelector("home-assistant-main").shadowRoot.querySelector("app-drawer-layout partial-panel-resolver ha-panel-lovelace").shadowRoot.querySelector("hui-root");
+
+// get constant elements from HA root element
+const appLayout = root.shadowRoot.querySelector("ha-app-layout");
 const lovelace = root.lovelace;
-const app = root.shadowRoot.querySelector("ha-app-layout");
 
-const bground = document.createElement("div"); // create empty container for background 
+// create container element, set style and append to container
+const bgroundElem = document.createElement("div"); // create empty container for background 
+setupStyle(lovelace, bgroundElem);
+appLayout.appendChild(bgroundElem);
 
-bground.style.position = "absolute"; // fill entire window
-bground.style.top = 0;
-bground.style.left = 0;
-bground.style.width = "100%";
-bground.style.height = "100%";
-
-bground.style.zIndex = -1; // below view elements
-
-app.appendChild(bground);
-
-const originalStyle = bground.style;
-
-setInterval(function() { setBackground(root, lovelace, bground, originalStyle) }, 5000);
-setBackground(root, lovelace, bground, originalStyle);
+setInterval(function () { setBackground(root, lovelace, bgroundElem) }, 5000);
+setBackground(root, lovelace, bgroundElem);
