@@ -5,7 +5,7 @@ function setBackground(root, lovelace, app, originalStyle) {
     let entityValidStates = entity.valid_states || ['playing'];
     let entityImageAttribute = entity.image_attribute || 'entity_picture';
 
-    let entityInfo = hass.states[entity];
+    let entityInfo = hass.states[entityName];
 
     if (!entityInfo) {
       console.log(`Couldn't find entity ${entityName}`);
