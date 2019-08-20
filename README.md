@@ -11,7 +11,8 @@ resources:
     type: module
 media_art_background:
   blur: 10px
-  transition_opacity: 1s
+  opacity: 0.5
+  transition_opacity: 2s
   entities:
     - media_player.main
     - entity: media_player.secondary
