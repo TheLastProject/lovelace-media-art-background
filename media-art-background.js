@@ -1,8 +1,8 @@
 function setupStyle(lovelace, bgroundElem) {
 
   // load config entries
-  let transitionOpacity = lovelace.config.media_art_background.transition_opacity || "0s"; // default -> instant
-  let filterBlur = lovelace.config.media_art_background.blur || '0px'; // default -> no blur
+  let transitionOpacity = lovelace.config.media_art_background.transition_opacity || "2s"; // default -> 2 seconds
+  let filterBlur = lovelace.config.media_art_background.blur || '10px'; // default -> blur 10 pixels
 
   // apply style to background element
   bgroundElem.style.position = "absolute"; // fill entire window
@@ -10,6 +10,8 @@ function setupStyle(lovelace, bgroundElem) {
   bgroundElem.style.left = 0;
   bgroundElem.style.width = "100%";
   bgroundElem.style.height = "100%";
+  bgroundElem.style.maxWidth = "100vw";
+  bgroundElem.style.maxHeight = "100vh";
 
   bgroundElem.style.opacity = 0;
   bgroundElem.style.transition = "opacity " + transitionOpacity;
@@ -25,6 +27,9 @@ function setupStyle(lovelace, bgroundElem) {
 
 function setBackground(root, lovelace, bgroundElem) {
   const hass = root.hass;
+
+  // load config entries
+  let maxOpacity = lovelace.config.media_art_background.opacity || '1'; // default -> fully opaque
 
   // loop through entities from config
   for (let entity of lovelace.config.media_art_background.entities) {
@@ -47,7 +52,7 @@ function setBackground(root, lovelace, bgroundElem) {
     if (!backgroundUrl) continue;
 
     bgroundElem.style.backgroundImage = `url('${backgroundUrl}')`
-    bgroundElem.style.opacity = 1;
+    bgroundElem.style.opacity = maxOpacity;
 
     return; // abort after first element with valid background
   }
