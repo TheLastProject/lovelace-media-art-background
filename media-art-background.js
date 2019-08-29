@@ -5,7 +5,7 @@ function setupStyle(lovelace, bgroundElem) {
   let filterBlur = lovelace.config.media_art_background.blur || '10px'; // default -> blur 10 pixels
 
   // apply style to background element
-  bgroundElem.style.position = "absolute"; // fill entire window
+  bgroundElem.style.position = "fixed"; // fill entire window
   bgroundElem.style.top = 0;
   bgroundElem.style.left = 0;
   bgroundElem.style.width = "100%";
@@ -19,7 +19,6 @@ function setupStyle(lovelace, bgroundElem) {
   bgroundElem.style.backgroundRepeat = 'no-repeat';
   bgroundElem.style.backgroundPosition = 'center';
   bgroundElem.style.backgroundSize = 'cover';
-  bgroundElem.style.backgroundAttachment = 'fixed';
   bgroundElem.style.filter = `blur(${filterBlur})`;
 
   bgroundElem.style.zIndex = -1; // below view elements
@@ -72,6 +71,7 @@ const lovelace = root.lovelace;
 const bgroundElem = document.createElement("div"); // create empty container for background 
 setupStyle(lovelace, bgroundElem);
 appLayout.appendChild(bgroundElem);
+appLayout.shadowRoot.querySelector("#contentContainer").style.transform = "none";
 
 setInterval(function () { setBackground(root, lovelace, bgroundElem) }, 5000);
 setBackground(root, lovelace, bgroundElem);
