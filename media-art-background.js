@@ -24,8 +24,10 @@ function setupStyle(lovelace, bgroundElem) {
   bgroundElem.style.zIndex = -1; // below view elements
 }
 
-function setBackground(root, lovelace, bgroundElem) {
+function setBackground(root, appLayout, lovelace, bgroundElem) {
   const hass = root.hass;
+
+  const viewRoot = appLayout.querySelector("hui-view");
 
   // load config entries
   let maxOpacity = lovelace.config.media_art_background.opacity || '1'; // default -> fully opaque
@@ -53,9 +55,14 @@ function setBackground(root, lovelace, bgroundElem) {
     bgroundElem.style.backgroundImage = `url('${backgroundUrl}')`
     bgroundElem.style.opacity = maxOpacity;
 
+    // disable user background
+    viewRoot.style.backgroundImage = 'none';
+
     return; // abort after first element with valid background
   }
 
+  // restore user background
+  viewRoot.style.backgroundImage = '';
   setupStyle(lovelace, bgroundElem);
 };
 
@@ -73,5 +80,5 @@ setupStyle(lovelace, bgroundElem);
 appLayout.appendChild(bgroundElem);
 appLayout.shadowRoot.querySelector("#contentContainer").style.transform = "none";
 
-setInterval(function () { setBackground(root, lovelace, bgroundElem) }, 5000);
+setInterval(function () { setBackground(root, appLayout, lovelace, bgroundElem) }, 5000);
 setBackground(root, lovelace, bgroundElem);
