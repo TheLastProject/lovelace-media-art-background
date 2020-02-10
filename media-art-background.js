@@ -81,4 +81,4 @@ appLayout.appendChild(bgroundElem);
 appLayout.shadowRoot.querySelector("#contentContainer").style.transform = "none";
 
 setInterval(function () { setBackground(root, appLayout, lovelace, bgroundElem) }, 5000);
-setBackground(root, lovelace, bgroundElem);
+setBackground(root, appLayout, lovelace, bgroundElem);
