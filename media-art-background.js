@@ -29,6 +29,9 @@ function setBackground(root, appLayout, lovelace, bgroundElem) {
 
   const viewRoot = appLayout.querySelector("hui-view");
 
+  // We may have initialized too early
+  if (!viewRoot) return;
+
   // load config entries
   let maxOpacity = lovelace.config.media_art_background.opacity || '1'; // default -> fully opaque
 
@@ -57,12 +60,13 @@ function setBackground(root, appLayout, lovelace, bgroundElem) {
 
     // disable user background
     viewRoot.style.backgroundImage = 'none';
+    viewRoot.style.background = 'none';
 
     return; // abort after first element with valid background
   }
 
   // restore user background
-  viewRoot.style.backgroundImage = '';
+  viewRoot.removeAttribute('style');
   setupStyle(lovelace, bgroundElem);
 };
 
