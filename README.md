@@ -21,7 +21,7 @@ media_art_background:
 
 **Note** Make sure to put it right at the top, not inside a view or anything. So it will look something like this:
 
-```
+```yaml
 media_art_background:
   entities:
     - media_player.living_room_tv
