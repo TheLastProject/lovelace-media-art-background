@@ -42,6 +42,8 @@ function setBackground(root, appLayout, lovelace, bgroundElem) {
     let entityName = entity.entity || entity;
     let entityValidStates = entity.valid_states || ['playing'];
     let entityImageAttribute = entity.image_attribute || 'entity_picture';
+    let entityValidViews = entity.views; //get a list of valid views
+    let currentview = window.location.pathname.substring(window.location.pathname.lastIndexOf('/')+1);
 
     let entityInfo = hass.states[entityName];
 
@@ -51,6 +53,10 @@ function setBackground(root, appLayout, lovelace, bgroundElem) {
     }
 
     if (!entityValidStates.includes(entityInfo.state)) continue;
+
+    if (entityValidViews) {
+      if (!entityValidViews.includes(currentview)) continue; //if views have been specified check they match the current view
+    }
 
     const backgroundUrl = entityInfo.attributes[entityImageAttribute];
     if (!backgroundUrl) continue;
