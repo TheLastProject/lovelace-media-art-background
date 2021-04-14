@@ -43,7 +43,7 @@ function setBackground(root, appLayout, lovelace, bgroundElem) {
     let entityValidStates = entity.valid_states || ['playing'];
     let entityImageAttribute = entity.image_attribute || 'entity_picture';
     let entityValidViews = entity.views; //get a list of valid views
-    let currentview = window.location.pathname.split('/')[2]; // determine current view
+    let currentview = window.location.pathname.substring(window.location.pathname.lastIndexOf('/')+1);
 
     let entityInfo = hass.states[entityName];
 
